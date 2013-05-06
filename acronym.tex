@@ -1,0 +1,57 @@
+%	Acronym by Mick van Gelderen
+%	Sources:
+%		http://tex.stackexchange.com/questions/13290/how-to-define-macros-with-numbers-in-them
+%		http://tex.stackexchange.com/questions/451/when-to-use-edef-noexpand-and-expandafter
+%		http://tex.stackexchange.com/questions/39380/what-exactly-do-csname-and-endcsname-do
+%	Defining an acronym:
+%		\acronym{key}{first}{later}
+%			key: The key should be a short identifier for your acronym
+%			first: The first time the acronym is used, this is displayed
+%			later: After the first time, this is displayed instead
+%	Using an acronym:
+%		\ac{key}
+%			Output depends on occurence in file. If the acronym is not defined, this command
+%			will define an acronym \acronym{key}{\emph{key}}{key} and then call \ac{key}
+%		\acf{key}
+%			Always outputs the first definition. If the acronym is not defined, this command
+%			will output \emph{key}
+%		\acl{key}
+%			Output the later definition, if the acronym is not defined, this command will
+%			output the key. 
+%	Example:
+%		\acronym{scrumbook}{\emph{The Scrum Guide} by \citet{schwaber2011}}{The Scrum Guide}
+%		We are reading a book called \ac{scrumbook}. \ac{scrumbook} is awesome. The best thing about \ac{scrumbook} is: ... 
+\makeatletter
+\ifx\acronym@\undefined% check if this file has been included already
+
+\newcommand{\acronym}[3]{%
+	\global\expandafter\def\csname acronym@unused\detokenize{#1}\endcsname{}%
+	\global\expandafter\def\csname acronym@first\detokenize{#1}\endcsname{#2}%
+	\global\expandafter\def\csname acronym@later\detokenize{#1}\endcsname{#3}%
+}
+\newcommand{\ac}[1]{%
+	\@ifundefined{acronym@first\detokenize{#1}}%
+		{% acronym is not defined
+			\acronym{#1}{\emph{#1}}{#1}% define new acronym
+			\ac{#1}% use new acronym
+		}{% acronym is defined
+			\@ifundefined{acronym@unused\detokenize{#1}}%
+			{\acl{#1}}% acronym is not unused so it has been used before
+			{% acronym has not been used before
+				\acf{#1}%
+				\global\expandafter\let\csname acronym@unused\detokenize{#1}\endcsname\relax%
+}}}
+\newcommand{\acf}[1]{%
+	\@ifundefined{acronym@first\detokenize{#1}}%
+		{\emph{#1}}%
+		{\csname acronym@first\detokenize{#1}\endcsname}%
+}
+\newcommand{\acl}[1]{%
+	\@ifundefined{acronym@later\detokenize{#1}}%
+		{#1}%
+		{\csname acronym@later\detokenize{#1}\endcsname}%
+}
+
+\let\acronym@\empty
+\fi
+\makeatother

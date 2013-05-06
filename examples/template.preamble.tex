@@ -1,0 +1,31 @@
+\documentclass{article}
+%TWOSIDED \documentclass[twoside]{article}
+
+\usepackage[numbers, sort&compress]{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage[colorlinks,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage[hmargin=4.7cm, vmargin=3.5cm]{geometry}
+%TWOSIDED \usepackage[hmarginratio=1:1, margin=4.7cm]{geometry} % default is 2:3 for two sided
+
+% Sans serif font
+\renewcommand\familydefault{\sfdefault}
+
+\snippet{acronym}
+\snippet{attachment}
+\snippet{todo}
+\snippet{documenttitle}
+\snippet{template.header}
+\snippet{code}
+
+\acronym{tourspel}{\emph{Tourspel web-applicatie} (TWA)}{TWA}
+\acronym{ssh}{\emph{Secure Shell} (SSH)}{SSH}
+\acronym{vps}{\emph{Virtual Private Server} (VPS)}{VPS}
+
+\author{
+	Mick van Gelderen \\ developer \and
+	Jelle Licht \\ developer
+}

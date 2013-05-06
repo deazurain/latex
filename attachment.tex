@@ -1,0 +1,31 @@
+% Make sure \section* goes into the table of contents and appears correctly for fancyfoot
+% http://tex.stackexchange.com/questions/8458/making-the-bibliography-appear-in-the-table-of-contents
+% http://stackoverflow.com/questions/2488681/latex-unnumbered-section-in-header-of-document
+%\def\unnumberedsection#1{\addcontentsline{toc}{section}{#1}\section*{#1\markboth{#1}{}}}
+
+\makeatletter
+\ifx\attachment@\undefined% check if this file has been included already
+
+% Attachments
+\newcounter{attachment}
+\renewcommand{\theattachment}{\Alph{attachment}}
+\newcommand{\attachmenttitle}[1]{Attachment \theattachment: #1}
+\newcommand{\attachment}[1]{%
+	\refstepcounter{attachment}%
+	\addcontentsline{toc}{section}{\attachmenttitle{#1}}%
+	\section*{\attachmenttitle{#1}\markboth{\uppercase{\attachmenttitle{#1}}}{}}%
+}
+
+% Appendixes
+\newcounter{appendix}
+\renewcommand{\theappendix}{\Alph{appendix}}
+\newcommand{\appendixtitle}[1]{Appendix \theappendix: #1}
+\renewcommand{\appendix}[1]{%
+	\refstepcounter{appendix}%
+	\addcontentsline{toc}{section}{\appendixtitle{#1}}%
+	\section*{\appendixtitle{#1}\markboth{\uppercase{\appendixtitle{#1}}}{}}%
+}
+
+\let\attachment@\empty
+\fi
+\makeatother

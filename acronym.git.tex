@@ -1,0 +1,23 @@
+% git commands as acronyms
+
+\usepackage{xcolor}
+\snippet{acronym}
+
+\definecolor{gitcommand}{gray}{0.45}
+\newcommand{\gitcommandhelper}[1]{\textcolor{gitcommand}{\texttt{#1}}}
+\newcommand{\gitcommand}[2]{%
+	\acronym{#1}%
+		{\href{#2}{\gitcommandhelper{#1}} (\url{#2})}%
+		{\href{#2}{\gitcommandhelper{#1}}}%
+}
+
+\gitcommand{git add}{http://git-scm.com/docs/git-add}
+\gitcommand{git branch}{http://git-scm.com/docs/git-branch}
+\gitcommand{git clone}{http://git-scm.com/docs/git-clone}
+\gitcommand{git commit}{http://git-scm.com/docs/git-commit}
+\gitcommand{git log}{http://git-scm.com/docs/git-log}
+\gitcommand{git merge}{http://git-scm.com/docs/git-merge}
+\gitcommand{git pull}{http://git-scm.com/docs/git-pull}
+\gitcommand{git push}{http://git-scm.com/docs/git-push}
+\gitcommand{git status}{http://git-scm.com/docs/git-status}
+\gitcommand{git tag}{http://git-scm.com/docs/git-tag}

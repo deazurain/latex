@@ -1,0 +1,22 @@
+% Defines a macro \documenttitle that reflecs the title of the document set with \title{}
+% This is required because the internal \@title cannot be used after \maketitle has been issued
+% It does not matter if you use \title{} before or after this definition
+% \documenttitle will obviously only be available after you used \title{}
+
+\makeatletter
+\ifx\documenttitle@\undefined% check if this file has been included already
+
+%\def\@originaltitle{\@latex@error{No \noexpand\title given}\@ehc}%original definition of \@title
+%\ifx\@title\@originaltitle\else%
+%	\def\documenttitle{\@title}%title was already defined
+%\fi%
+\let\documenttitle\@title% just copy \@title since it should be defined as something already
+\let\originaltitle\title% create a copy of the original \title function
+\def\title#1{% redefine \title{} as
+	\originaltitle{#1}% the original \title{argument 1} command and
+	\def\documenttitle{#1}% set the \documenttitle macro to argument 1
+}
+
+\let\documenttitle@\empty
+\fi
+\makeatother

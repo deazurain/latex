@@ -1,0 +1,16 @@
+\usepackage{changepage}
+\usepackage{xcolor}
+
+\definecolor{dark-gray}{gray}{0.27}
+
+\newenvironment{code}
+	{%
+		\par\noindent\ignorespaces%
+		\begin{adjustwidth}{2em}{}%
+		\hrulefill\\%
+		\begingroup\ttfamily\color{dark-gray}%
+	}{%
+		\par\noindent\hrulefill%
+		\endgroup%
+		\end{adjustwidth}%	
+	}
