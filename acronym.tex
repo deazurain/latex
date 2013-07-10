@@ -13,45 +13,177 @@
 %			Output depends on occurence in file. If the acronym is not defined, this command
 %			will define an acronym \acronym{key}{\emph{key}}{key} and then call \ac{key}
 %		\acf{key}
-%			Always outputs the first definition. If the acronym is not defined, this command
-%			will output \emph{key}
+%			Always outputs the first definition and does not affect \ac. If the acronym is not
+%			defined, this command will output \emph{key}.
 %		\acl{key}
 %			Output the later definition, if the acronym is not defined, this command will
-%			output the key. 
+%			output the key.
+%		\acr{key}
+%			Works like \acf but also registers the key as used. So with \acronym{x}{a}{b},
+%			\acr{x}\ac{x}\ac{x} will output 'abb' and
+%			\acf{x}\ac{x}\ac{x} will output 'aab'.
 %	Example:
 %		\acronym{scrumbook}{\emph{The Scrum Guide} by \citet{schwaber2011}}{The Scrum Guide}
-%		We are reading a book called \ac{scrumbook}. \ac{scrumbook} is awesome. The best thing about \ac{scrumbook} is: ... 
-\makeatletter
-\ifx\acronym@\undefined% check if this file has been included already
+%		We are reading a book called \ac{scrumbook}. \ac{scrumbook} is awesome. The best thing about \ac{scrumbook} is: ...
+%	Shortcuts:
+% 		\acronymwa{SHORT}{FULL}{ABRR}{URL}
+% 		\acronymwf{SHORT}{FULL}{URL}
+% 		\acronyma{SHORT}{FULL}{ABBR}
+%  		\acronymf{SHORT}{FULL
+%
+%	Practical example of an acronym list:
+%		makes heavy use of the shortcuts. Define your own shortcuts if you want different styling or if you are missing something.
+%
+% 	Abbreviated acronyms
+% 		\acronyma{api}{Application Program Interface}{API}
+% 		\acronyma{df}{DizzyData front-end}{DF}
+% 		\acronyma{gui}{Graphical User Interface}{GUI}
+% 		\acronyma{mvc}{Model-View-Controller}{MVC}
+% 		\acronyma{mvw}{Model-View-Whatever}{MVW}
+% 		\acronyma{ocr}{Optical Character Recognition}{OCR}
+% 		\acronyma{oop}{Object Oriented Programming}{OOP}
+% 		\acronyma{rest}{Representational State Transfer}{REST}
+% 		\acronyma{saas}{Software-as-a-Service}{SaaS}
 
-\newcommand{\acronym}[3]{%
-	\global\expandafter\def\csname acronym@unused\detokenize{#1}\endcsname{}%
-	\global\expandafter\def\csname acronym@first\detokenize{#1}\endcsname{#2}%
-	\global\expandafter\def\csname acronym@later\detokenize{#1}\endcsname{#3}%
+% 	Full acronyms
+% 		\acronymf{backlog}{Product Backlog}
+% 		\acronymf{bootstrap}{Bootstrap}
+% 		\acronymf{daily}{Daily Scrum}
+% 		\acronymf{done}{Done}
+% 		\acronymf{end-user programming}{End-User Programming}
+% 		\acronymf{greenhopper}{Greenhopper}
+% 		\acronymf{increment}{Increment}
+% 		\acronymf{manager}{project manager}
+% 		\acronymf{master}{Scrum Master}
+% 		\acronymf{oa}{OAuth}
+% 		\acronymf{organization}{Organization}
+% 		\acronymf{owner}{Product Owner}
+% 		\acronymf{requirement analysis}{requirement analysis}
+% 		\acronymf{retrospective}{Sprint Retrospective}
+% 		\acronymf{review}{Sprint Review}
+% 		\acronymf{scram}{SCRAM}
+% 		\acronymf{scrumteam}{Scrum Team}
+% 		\acronymf{scrum}{Scrum}
+% 		\acronymf{sprintbacklog}{Sprint Backlog}
+% 		\acronymf{sprintgoal}{Sprint Goal}
+% 		\acronymf{sprintplanning}{Sprint Planning Meeting}
+% 		\acronymf{sprint}{Sprint}
+% 		\acronymf{stakeholder identification}{stakeholder identification}
+% 		\acronymf{team}{Development Team}
+
+% 	Abbreviated web acronyms
+% 		\acronymwa{ajax}{Asynchronous JavaScript and XML}{Ajax}{https://developer.mozilla.org/en/docs/AJAX}
+% 		\acronymwa{css}{Cascading Style Sheets}{CSS}{https://developer.mozilla.org/en-US/docs/Web/CSS}
+% 		\acronymwa{html}{HyperText Markup Language}{HTML}{https://developer.mozilla.org/en-US/docs/Web/HTML}
+% 		\acronymwa{json}{JavaScript Object Notation}{JSON}{https://developer.mozilla.org/en/docs/JSON}
+% 		\acronymwa{npm}{Node Package Manager}{NPM}{https://npmjs.org}
+% 		\acronymwa{svn}{Apache Subversion}{SVN}{http://subversion.apache.org}
+
+% 	Full web acronyms
+% 		\acronymwf{.net}{.NET}{http://microsoft.com/net}
+% 		\acronymwf{angular seed}{angular-seed}{https://github.com/angular/angular-seed}
+% 		\acronymwf{angular}{AngularJS}{http://angularjs.org}
+% 		\acronymwf{csharp}{C\#}{http://msdn.microsoft.com/en-us/library/vstudio/67ef8sbd.aspx}
+% 		\acronymwf{dribbble}{Dribbble}{http://dribbble.com}
+% 		\acronymwf{express}{Express}{http://expressjs.com}
+% 		\acronymwf{github}{github}{http://github.com}
+% 		\acronymwf{git}{Git}{http://git-scm.com}
+% 		\acronymwf{grunt}{Grunt}{http://gruntjs.com}
+% 		\acronymwf{istanbul}{istanbul}{http://gotwarlost.github.io/istanbul}
+% 		\acronymwf{jasmine}{Jasmine}{http://pivotal.github.io/jasmine}
+% 		\acronymwf{jquery}{jQuery}{http://jquery.com}
+% 		\acronymwf{js}{JavaScript}{https://developer.mozilla.org/en-US/docs/Web/JavaScript}
+% 		\acronymwf{karma}{Karma}{http://karma-runner.github.io}
+% 		\acronymwf{modernizr}{Modernizr}{http://modernizr.com}
+% 		\acronymwf{node}{Node.js}{http://nodejs.org}
+% 		\acronymwf{q}{Q}{https://github.com/kriskowal/q}
+% 		\acronymwf{stylus}{Stylus}{http://learnboost.github.io/stylus}
+% 		\acronymwf{twitter}{Twitter}{https://twitter.com}
+% 		\acronymwf{yeoman}{Yeoman}{http://yeoman.io/gettingstarted.html}
+
+% 	Hard coded using the plain \acronym
+% 		\acronym{atlassian}{\emph{Atlassian} \cite{atlassian}}{Atlassian}
+% 		\acronym{bitbucket}{\emph{Bitbucket} \cite{bitbucket}}{Bitbucket}
+% 		\acronym{gitbook}{\emph{Pro Git} by \citet{chacon2009}}{Pro Git}
+% 		\acronym{jira}{\emph{Jira} \cite{jira}}{Jira}
+% 		\acronym{requirement analysis book}{\emph{Software Development Process -- activities and steps} \cite{sdpas}}{SDP -- activities and steps}
+% 		\acronym{scrambook}{\emph{Scenario-based requirements engineering} by \citet{sutcliffe2003}}{Scenario-based requirements engineering}
+% 		\acronym{scrumbook}{\emph{The Scrum Guide} by \citet{schwaber2011}}{The Scrum Guide}
+% 		\acronym{sig}{\emph{Software Improvement Group} \cite{sig} (SIG)}{SIG}
+
+\makeatletter
+\newcommand{\acronym@warning}[1]{% hidden utility command that issues a LaTeX package warning
+	\PackageWarning{acronym.tex}{Used key ``#1'' but acronym is not defined}
 }
-\newcommand{\ac}[1]{%
-	\@ifundefined{acronym@first\detokenize{#1}}%
+\newcommand{\acronym}[3]{% define an acronym
+	\global\expandafter\def\csname acronymunused@\detokenize{#1}\endcsname{}%
+	\global\expandafter\def\csname acronymfirst@\detokenize{#1}\endcsname{#2}%
+	\global\expandafter\def\csname acronymlater@\detokenize{#1}\endcsname{#3}%
+}
+\newcommand{\ac}[1]{% ACronym
+	\@ifundefined{acronymfirst@\detokenize{#1}}%
 		{% acronym is not defined
+			\acronym@warning{#1}% warn
 			\acronym{#1}{\emph{#1}}{#1}% define new acronym
 			\ac{#1}% use new acronym
 		}{% acronym is defined
-			\@ifundefined{acronym@unused\detokenize{#1}}%
+			\@ifundefined{acronymunused@\detokenize{#1}}%
 			{\acl{#1}}% acronym is not unused so it has been used before
 			{% acronym has not been used before
 				\acf{#1}%
-				\global\expandafter\let\csname acronym@unused\detokenize{#1}\endcsname\relax%
+				\global\expandafter\let\csname acronymunused@\detokenize{#1}\endcsname\relax%
 }}}
-\newcommand{\acf}[1]{%
-	\@ifundefined{acronym@first\detokenize{#1}}%
-		{\emph{#1}}%
-		{\csname acronym@first\detokenize{#1}\endcsname}%
+\newcommand{\acr}[1]{% ACronym Re-appear
+	\@ifundefined{acronymfirst@\detokenize{#1}}%
+		{}{% acronym is defined, redefine the unused
+			\global\expandafter\def\csname acronymunused@\detokenize{#1}\endcsname{}%
+		}%
+	\ac{#1}%
 }
-\newcommand{\acl}[1]{%
-	\@ifundefined{acronym@later\detokenize{#1}}%
-		{#1}%
-		{\csname acronym@later\detokenize{#1}\endcsname}%
+\newcommand{\acf}[1]{% ACronym First occurrence
+	\@ifundefined{acronymfirst@\detokenize{#1}}%
+		{%
+			\acronym@warning{#1}% warn
+			\emph{#1}%
+		}%
+		{\csname acronymfirst@\detokenize{#1}\endcsname}%
+}
+\newcommand{\acl}[1]{% ACronym Later occurrences
+	\@ifundefined{acronymlater@\detokenize{#1}}%
+		{%
+			\acronym@warning{#1}% warn
+			#1%
+		}%
+		{\csname acronymlater@\detokenize{#1}\endcsname}%
+}
+\makeatother
+
+% Shortcuts for defining acronyms:
+%
+% Acronym Web Abbreviated
+% Command:		\acronymwa{SHORT}{FULL}{ABRR}{URL}
+% Definition:	\acronym{SHORT}{\emph{\href{URL}{FULL}}\footnote{\url{URL}} (ABBR)}{ABBR}
+\newcommand{\acronymwa}[4]{%
+	\acronym{#1}{\emph{\href{#4}{#2}}\,\footnote{\url{#4}} (#3)}{#3}%
 }
 
-\let\acronym@\empty
-\fi
-\makeatother
+% Acronym Web Full
+% Command:		\acronymwf{SHORT}{FULL}{URL}
+% Definition:	\acronym{SHORT}{\emph{\href{URL}{FULL}}\footnote{\url{URL}}}{FULL}
+\newcommand{\acronymwf}[3]{%
+	\acronym{#1}{\emph{\href{#3}{#2}}\,\footnote{\url{#3}}}{#2}%
+}
+
+% Acronym Abbreviated
+% Command:		\acronyma{SHORT}{FULL}{ABBR}
+% Definition:	\acronym{SHORT}{\emph{FULL} (ABBR)}{ABBR}
+\newcommand{\acronyma}[3]{%
+	\acronym{#1}{\emph{#2} (#3)}{#3}%
+}
+
+% Acronym Full
+% Command: 		\acronymf{SHORT}{FULL}
+% Definition: 	\acronym{SHORT}{\emph{FULL}}{FULL}
+\newcommand{\acronymf}[2]{%
+	\acronym{#1}{\emph{#2}}{#2}%
+}
